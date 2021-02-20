@@ -1,6 +1,4 @@
-  METHOD ZZ_INITIALIZE .
-
-* old code of INITIALIZE, repaired below.
+  METHOD zz_constructor.
 
 *    DATA: ls_data_models            TYPE ris_s_md_data_models,
 *          lt_data_models            TYPE ris_t_md_data_models,
@@ -11,6 +9,7 @@
 *          lt_ris_dm_types           TYPE TABLE OF ris_dm_types,
 *          ls_ris_dm_types           TYPE ris_dm_types,
 *          lo_type_descriptor        TYPE REF TO cl_abap_typedescr,
+*          lo_superclass_descriptor  TYPE REF TO cl_abap_classdescr,
 *          lo_class_descriptor       TYPE REF TO cl_abap_classdescr,
 *          lo_meta_model             TYPE REF TO cl_ris_meta_model,
 *          ls_metadata               TYPE ris_s_metadata,
@@ -22,6 +21,9 @@
 *    FIELD-SYMBOLS: <ls_model_implementation> TYPE ris_s_md_model_implementation,
 *                   <ls_related_metadata>     TYPE ris_s_metadata,
 *                   <ls_existing_metadata>    TYPE ris_s_metadata.
+*
+*    " Deskriptor der Metamodell-Superklasse abholen
+*    lo_superclass_descriptor ?= cl_abap_classdescr=>describe_by_name( 'CL_RIS_META_MODEL' ).
 *
 *    " Auslesen der Datenmodelle aus der entsprechenden Tabelle
 *    SELECT * FROM ris_data_model INTO ls_ris_data_model.
@@ -88,13 +90,18 @@
 *              CONTINUE.
 *          ENDTRY.
 *
+*          DATA lv_superclass_exp_name TYPE string.
+*          lv_superclass_exp_name = lo_superclass_descriptor->get_relative_name( ).
 *
-**           Überprüfen, ob die Klasse von CL_RIS_META_MODEL erbt
-*          IF cl_ris_shm_metadata=>inherits_cl_ris_meta_model( lo_class_descriptor ) = abap_false.
-*            DELETE TABLE ls_data_models-model_implementations FROM <ls_model_implementation>.
-*            CONTINUE.
+*          " Überprüfen, ob die Klasse auch wirklich ein Töchterchen unserer Superklasse ist
+*          IF  lv_superclass_exp_name NE lo_class_descriptor->get_super_class_type( )->get_relative_name( ).
+*            DATA lv_superclass_act_name TYPE string.
+*            lv_superclass_act_name = lo_class_descriptor->get_super_class_type( )->get_super_class_type( )->get_relative_name( ).
+*            IF lv_superclass_exp_name NE lv_superclass_act_name.
+*              DELETE TABLE ls_data_models-model_implementations FROM <ls_model_implementation>.
+*              CONTINUE.
+*            ENDIF.
 *          ENDIF.
-*
 *          " Modellimplementierung gefunden
 *          IF lv_default_implementation EQ abap_true.
 *            <ls_model_implementation>-default_implementation = abap_true.
@@ -221,6 +228,7 @@
           lt_ris_dm_types           TYPE TABLE OF ris_dm_types,
           ls_ris_dm_types           TYPE ris_dm_types,
           lo_type_descriptor        TYPE REF TO cl_abap_typedescr,
+          lo_superclass_descriptor  TYPE REF TO cl_abap_classdescr,
           lo_class_descriptor       TYPE REF TO cl_abap_classdescr,
           lo_meta_model             TYPE REF TO cl_ris_meta_model,
           ls_metadata               TYPE ris_s_metadata,
@@ -232,6 +240,9 @@
     FIELD-SYMBOLS: <ls_model_implementation> TYPE ris_s_md_model_implementation,
                    <ls_related_metadata>     TYPE ris_s_metadata,
                    <ls_existing_metadata>    TYPE ris_s_metadata.
+
+    " Deskriptor der Metamodell-Superklasse abholen
+    lo_superclass_descriptor ?= cl_abap_classdescr=>describe_by_name( 'CL_RIS_META_MODEL' ).
 
     " Auslesen der Datenmodelle aus der entsprechenden Tabelle
     SELECT * FROM ris_data_model INTO ls_ris_data_model.
@@ -302,13 +313,18 @@
               CONTINUE.
           ENDTRY.
 
+          DATA lv_superclass_exp_name TYPE string.
+          lv_superclass_exp_name = lo_superclass_descriptor->get_relative_name( ).
 
-*           Überprüfen, ob die Klasse von CL_RIS_META_MODEL erbt
-          IF cl_ris_shm_metadata=>inherits_cl_ris_meta_model( lo_class_descriptor ) = abap_false.
-            DELETE TABLE ls_data_models-model_implementations FROM <ls_model_implementation>.
-            CONTINUE.
+          " Überprüfen, ob die Klasse auch wirklich ein Töchterchen unserer Superklasse ist
+          IF  lv_superclass_exp_name NE lo_class_descriptor->get_super_class_type( )->get_relative_name( ).
+            DATA lv_superclass_act_name TYPE string.
+            lv_superclass_act_name = lo_class_descriptor->get_super_class_type( )->get_super_class_type( )->get_relative_name( ).
+            IF lv_superclass_exp_name NE lv_superclass_act_name.
+              DELETE TABLE ls_data_models-model_implementations FROM <ls_model_implementation>.
+              CONTINUE.
+            ENDIF.
           ENDIF.
-
           " Modellimplementierung gefunden
           IF lv_default_implementation EQ abap_true.
             <ls_model_implementation>-default_implementation = abap_true.
