@@ -368,9 +368,9 @@
 * <ZZ>
           ELSE.
             READ TABLE zz_lt_legacy_metadata
-                      WITH KEY  trobjtype   = ls_data_models-trobjtype
-                                subtype     = ls_data_models-subtype
-                                legacy_type = ls_data_models-legacy_type INTO ls_metadata.
+                      WITH KEY  trobjtype   = ls_metadata-trobjtype
+                                subtype     = ls_metadata-subtype
+                                legacy_type = ls_metadata-legacy_type INTO ls_metadata.
           ENDIF.
 * </ZZ>
 
