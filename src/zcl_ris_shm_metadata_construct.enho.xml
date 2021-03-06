@@ -18,8 +18,17 @@
      <ENHMODE>D</ENHMODE>
      <FULL_NAME>\TY:CL_RIS_SHM_METADATA\ME:CONSTRUCTOR\SE:BEGIN\EI</FULL_NAME>
      <SOURCE>
-      <item>    zz_constructor( ).</item>
-      <item>    RETURN.</item>
+      <item>    DATA zz_tt_comptab TYPE TABLE OF cvers_sdu.</item>
+      <item>    CALL FUNCTION &apos;DELIVERY_GET_INSTALLED_COMPS&apos;</item>
+      <item>      TABLES</item>
+      <item>        tt_comptab = zz_tt_comptab</item>
+      <item>      EXCEPTIONS</item>
+      <item>        others     = 1.</item>
+      <item>    IF sy-subrc = 0 AND line_exists( zz_tt_comptab[ component = &apos;SAP_BASIS&apos; release = &apos;752&apos; extrelease = &apos;0000000000&apos; ] ).</item>
+      <item>      zz_constructor( ).</item>
+      <item>      RETURN.</item>
+      <item>    ENDIF.</item>
+      <item>    ASSERT 1 = 1. &quot; DEBUG HELPER</item>
      </SOURCE>
     </ENH_HOOK_IMPL>
    </ENHANCEMENTS>
