@@ -165,4 +165,4 @@ LOOP AT lt_data_models INTO ls_data_models.
 
 ENDLOOP.
 
-ASSERT 1 = 1.
+ASSERT 1 = 1. " DEBUG HELPER
