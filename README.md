@@ -8,7 +8,9 @@ The general solution is to define the "metadata" as a constant in class `CL_RIS_
 After that, it takes no more than 3 seconds.
 
 How this solution was developed:
-- I call once the program `Z_RIS_SHM_METADATA` to determine the metadata, and I used the adaptation of this [debugger tool](https://github.com/sandraros/abap_debugger_data_view_extension) to transform the generated metadata into ABAP code `DATA(...) = VALUE #( ... )`.
+- I install first the [DVE debugger tool](https://github.com/objective-partner/abap_debugger_data_view_extension) 
+- I install this program [`Z_RIS_SHM_METADATA`](https://github.com/sandraros/ADT-7.52-Trial-faster-Alt-F8/blob/7.52-SP-0/src/z_ris_shm_metadata.prog.abap)
+- I add a breakpoint at the end of `Z_RIS_SHM_METADATA`, run the program, run the DVE tool to display the variable `lt_metadata` as ABAP code `VALUE #( ... )` (takes 3 minutes to display it, there are tens of thousands of lines).
 - I initialize this metadata in the new method `ZZ_GET_LEGACY_METADATA2` of class `CL_RIS_SHM_METADATA` via the Enhancement Framework
 - I changed the methods `CONSTRUCTOR` and `INITIALIZE` via the Enhancement Framework to add code at the beginning of these 2 methods to call respectively the new methods `ZZ_CONSTRUCTOR` and `ZZ_INITIALIZE` (and leave the method after calling them, via `RETURN`) which are a copy of them + changed code as below (marked `<ZZ>...</ZZ>`):
   - Block 1:
