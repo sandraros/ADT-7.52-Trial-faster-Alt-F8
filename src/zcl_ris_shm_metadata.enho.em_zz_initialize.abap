@@ -6,7 +6,7 @@ METHOD zz_initialize .
       tt_comptab = zz_tt_comptab
     EXCEPTIONS
       OTHERS     = 1.
-  IF sy-subrc = 0 AND line_exists( zz_tt_comptab[ component = 'SAP_BASIS' release = '752' extrelease = '0001' ] ).
+  IF sy-subrc = 0 AND line_exists( zz_tt_comptab[ component = 'SAP_BASIS' release = '752' extrelease = '0004' ] ).
 
     " Do not execute standard INITIALIZE, instead do the adapted code below
     "   (copy of method INITIALIZE + <ZZ> for changes)
@@ -153,9 +153,9 @@ METHOD zz_initialize .
 * <ZZ>
           ELSE.
             READ TABLE zz_lt_legacy_metadata
-                      WITH KEY  trobjtype   = ls_metadata-trobjtype
-                                subtype     = ls_metadata-subtype
-                                legacy_type = ls_metadata-legacy_type INTO ls_metadata.
+                      WITH KEY  trobjtype   = ls_data_models-trobjtype
+                                subtype     = ls_data_models-subtype
+                                legacy_type = ls_data_models-legacy_type INTO ls_metadata.
           ENDIF.
 * </ZZ>
 
