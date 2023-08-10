@@ -1,7 +1,8 @@
-# ADT-7.52-Trial-faster-Alt-F8
-With ABAP Trial 7.52 SP 0 or 1, and ADT, if you use Alt+F8 to execute T.Code or anything else, when you enter a name, the search is very slow if the name is not already present in the history. The search takes something like 30 to 60 seconds.
+# ADT Faster ALT+F8 with ABAP backend 7.40 SP 23
 
-The note [3006480 "Where-used list is not working"](https://launchpad.support.sap.com/#/notes/3006480) provides a solution for 7.53 and above, but not for 7.52.
+With ABAP Trial 7.40 SP 23, and ADT, if you use Alt+F8 to execute T.Code or anything else, when you enter a name, the search is very slow if the name is not already present in the history. The search takes something like 30 to 60 seconds.
+
+The note [3006480 "Where-used list is not working"](https://launchpad.support.sap.com/#/notes/3006480) provides a solution for 7.53 and above, but not for 7.40 SP 23.
 
 The general solution is to define the "metadata" as a constant in class `CL_RIS_SHM_METADATA` instead of executing lot of code at each search which in fact always generates the same metadata.
 
@@ -57,4 +58,5 @@ How this solution was developed:
 - 
 - Now ALT+F8 will search faster.
 
-NB: it's only tested for 7.52 SP 0 and 1. Use the same approach for 7.52 SP 4 for instance. For 7.53 and above, apply the note 3006480.
+NB: it's only tested for 7.40 SP 23. Use the same approach for other SP and other releases. For 7.53 and above, apply the note 3006480.
+
